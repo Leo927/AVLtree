@@ -13,6 +13,7 @@ private:
 	typedef Node<T, linkSize> treeNode;
 protected:	
 	treeNode* rootPtr;	
+
 public:
 	enum PrintOrder { PREORDER, INORDER, POSTORDER, LEVEL, TREE};
 public:
@@ -31,7 +32,6 @@ private:
 	void printPostOrder(treeNode*);
 	void printLeveled(treeNode*);
 	void printTree(treeNode*);
-	void printTree(treeNode*, Buffer* buffer);
 	int width(int n);
 	int depth(int n);
 	int layerCount()const;
@@ -71,6 +71,7 @@ inline int Tree<T, linkSize>::depth(int n)
 	if (n == 0)return 0;
 	if (n == 1)return 1;
 	return  depth(n - 1) + width(n - 1) / 2 + 2;
+	
 }
 //
 template<typename T, int linkSize>
@@ -176,19 +177,13 @@ inline void Tree<T, linkSize>::printLeveled(treeNode*)
 }
 
 template<typename T, int linkSize>
-inline void Tree<T, linkSize>::printTree(treeNode*)
+inline void Tree<T, linkSize>::printTree(treeNode* node)
 {
-	Buffer<depth(layerCount()), width(layerCount())> buffer();
 	
-
 }
 
 
 
-template<typename T, int linkSize>
-inline void Tree<T, linkSize>::printTree(treeNode*, Buffer<depth(layerCount() , width(layerCount()) >* buffer)
-{
-}
 
 
 

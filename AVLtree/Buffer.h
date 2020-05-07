@@ -5,7 +5,7 @@
 //
 
 #pragma once
-
+#include <vector>
 
 
 
@@ -14,7 +14,6 @@
 //
 //  A class to represent the display buffer.
 //
-template<int BUFFER_ROW_COUNT, int BUFFER_COLUMN_COUNT>
 class Buffer
 {
 public:
@@ -30,6 +29,19 @@ public:
 	//               of the buffer are set to EMPTY.
 	//
 	Buffer ();
+
+	//
+	//  Default Constructor
+	//
+	//  Purpose: To create a Buffer with certain size
+	//  Parameter(s): N/A
+	//  Precondition(s): N/A
+	//  Returns: N/A
+	//  Side Effect: A new Buffer is created with a current
+	//               offset of row 0 and column 0.  All elements
+	//               of the buffer are set to EMPTY.
+	//
+	Buffer(size_t rows_, size_t columns_);
 
 	//
 	//  print
@@ -90,8 +102,14 @@ public:
 	//
 	void setCell (int row, int column, char value);
 
+
+	const std::vector<char>& operator[](int _row) const;
+	std::vector<char>& operator[](int _row);
+
 private:
-	char contents[BUFFER_ROW_COUNT][BUFFER_COLUMN_COUNT];
+	std::vector<std::vector<char>> contents;
+	size_t rowCount;
+	size_t columnCount;
 	int row_offset;
 	int column_offset;
 };

@@ -9,30 +9,44 @@
 using namespace std;
 
 static const char BORDER = '#';
-static const char EMPTY  = ' ';
+static const char EMPTY = ' ';
 
 
-template<int BUFFER_ROW_COUNT, int BUFFER_COLUMN_COUNT>
-Buffer<BUFFER_ROW_COUNT,BUFFER_COLUMN_COUNT> :: Buffer ()
-		// contents will be initialized by clear below
-		: row_offset(0),
-		  column_offset(0)
+
+Buffer::Buffer()
+// contents will be initialized by clear below
 {
+	row_offset = 0;
+	column_offset = 0;
+	rowCount = 0;
+	columnCount = 0;
 	clear();
 }
 
-template<int BUFFER_ROW_COUNT, int BUFFER_COLUMN_COUNT>
-void Buffer<BUFFER_ROW_COUNT,BUFFER_COLUMN_COUNT> :: print () const
+Buffer::Buffer(size_t rows_, size_t columns_)
+{
+	rowCount = rows_;
+	columnCount = columns_;
+	row_offset = 0;
+	column_offset = 0;
+	for (size_t i = 0; i < rows_; i++)
+	{
+		contents.at(i) = std::vector<char>(columns_, EMPTY);
+	}
+}
+
+
+void Buffer::print() const
 {
 	cout << BORDER;
-	for(int r = 0; r < BUFFER_COLUMN_COUNT; r++)
+	for (int r = 0; r < rowCount; r++)
 		cout << BORDER;
 	cout << BORDER << endl;
 
-	for(int r = 0; r < BUFFER_ROW_COUNT; r++)
+	for (int r = 0; r < columnCount; r++)
 	{
 		cout << BORDER;
-		for(int c = 0; c < BUFFER_COLUMN_COUNT; c++)
+		for (int c = 0; c < rowCount; c++)
 		{
 			cout << contents[r][c];
 		}
@@ -40,40 +54,50 @@ void Buffer<BUFFER_ROW_COUNT,BUFFER_COLUMN_COUNT> :: print () const
 	}
 
 	cout << BORDER;
-	for(int r = 0; r < BUFFER_COLUMN_COUNT; r++)
+	for (int r = 0; r < rowCount; r++)
 		cout << BORDER;
 	cout << BORDER << endl;
 }
 
 
-template<int BUFFER_ROW_COUNT, int BUFFER_COLUMN_COUNT>
-void Buffer<BUFFER_ROW_COUNT,BUFFER_COLUMN_COUNT> :: clear ()
+
+void Buffer::clear()
 {
-	for(int r = 0; r < BUFFER_ROW_COUNT; r++)
+	for (int r = 0; r < columnCount; r++)
 	{
-		for(int c = 0; c < BUFFER_COLUMN_COUNT; c++)
+		for (int c = 0; c < rowCount; c++)
 		{
 			contents[r][c] = EMPTY;
 		}
 	}
 }
-template<int BUFFER_ROW_COUNT, int BUFFER_COLUMN_COUNT>
-void Buffer<BUFFER_ROW_COUNT,BUFFER_COLUMN_COUNT> :: setOffset (int row_offset1, int column_offset1)
+
+void Buffer::setOffset(int row_offset1, int column_offset1)
 {
-	row_offset    = row_offset1;
+	row_offset = row_offset1;
 	column_offset = column_offset1;
 }
-template<int BUFFER_ROW_COUNT, int BUFFER_COLUMN_COUNT>
-void Buffer<BUFFER_ROW_COUNT,BUFFER_COLUMN_COUNT> :: setCell (int row, int column, char value)
+
+void Buffer::setCell(int row, int column, char value)
 {
-	row    -= row_offset;
+	row -= row_offset;
 	column -= column_offset;
 
-	if(row    >= 0 && row    < BUFFER_ROW_COUNT &&
-	   column >= 0 && column < BUFFER_COLUMN_COUNT)
+	if (row >= 0 && row < columnCount &&
+		column >= 0 && column < rowCount)
 	{
 		contents[row][column] = value;
 	}
+}
+
+const std::vector<char>& Buffer::operator[](int _row) const
+{
+	return contents.at(_row);
+}
+
+std::vector<char>& Buffer::operator[](int _row)
+{
+	return contents.at(_row);
 }
 
 
